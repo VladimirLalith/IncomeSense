@@ -8,7 +8,8 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const db_1 = __importDefault(require("./config/db"));
-const authRoutes_1 = __importDefault(require("./routes/authRoutes")); // Import auth routes
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const transactionRoutes_1 = __importDefault(require("./routes/transactionRoutes")); // Import transaction routes
 // Load environment variables
 dotenv_1.default.config();
 // Connect to database
@@ -22,7 +23,9 @@ app.get('/', (req, res) => {
     res.send('API is running...');
 });
 // Use authentication routes
-app.use('/api/auth', authRoutes_1.default); // All auth routes will be prefixed with /api/auth
+app.use('/api/auth', authRoutes_1.default);
+// Use transaction routes
+app.use('/api/transactions', transactionRoutes_1.default); // All transaction routes will be prefixed with /api/transactions
 // Define port
 const PORT = process.env.PORT || 5000;
 // Start the server
