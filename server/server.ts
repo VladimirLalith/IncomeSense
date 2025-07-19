@@ -1,0 +1,34 @@
+// server/server.ts
+import express, { Application, Request, Response } from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import connectDB from './config/db';
+import authRoutes from './routes/authRoutes'; // Import auth routes
+
+// Load environment variables
+dotenv.config();
+
+// Connect to database
+connectDB();
+
+const app: Application = express();
+
+// Middleware
+app.use(express.json()); // Body parser for JSON data
+app.use(cors()); // Enable CORS for all routes
+
+// Basic route for testing
+app.get('/', (req: Request, res: Response) => {
+    res.send('API is running...');
+});
+
+// Use authentication routes
+app.use('/api/auth', authRoutes); // All auth routes will be prefixed with /api/auth
+
+// Define port
+const PORT = process.env.PORT || 5000;
+
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
