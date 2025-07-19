@@ -3,7 +3,8 @@ import express, { Application, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config/db';
-import authRoutes from './routes/authRoutes'; // Import auth routes
+import authRoutes from './routes/authRoutes';
+import transactionRoutes from './routes/transactionRoutes'; // Import transaction routes
 
 // Load environment variables
 dotenv.config();
@@ -23,7 +24,10 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // Use authentication routes
-app.use('/api/auth', authRoutes); // All auth routes will be prefixed with /api/auth
+app.use('/api/auth', authRoutes);
+
+// Use transaction routes
+app.use('/api/transactions', transactionRoutes); // All transaction routes will be prefixed with /api/transactions
 
 // Define port
 const PORT = process.env.PORT || 5000;
