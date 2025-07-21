@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 // Define your backend API URL
-//for deploypush
+console.log("API Base URL:", import.meta.env.VITE_API_BASE_URL);
 const API_URL = import.meta.env.VITE_API_BASE_URL; // Make sure this matches your backend
 
 interface AuthResponse {
