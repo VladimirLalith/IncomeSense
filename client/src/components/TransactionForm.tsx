@@ -1,13 +1,11 @@
-// client/src/components/TransactionForm.tsx
+// F:\IncomeSense\client\src\components\TransactionForm.tsx
 import React, { useState, useEffect } from 'react';
-// --- CORRECTED IMPORT BELOW ---
-import type { TransactionData } from '../api/transactions'; // TransactionData is a type, must use 'import type'
-// --- CORRECTED IMPORT ABOVE ---
+import type { TransactionData } from '../api/transactions';
 
 interface TransactionFormProps {
-  initialData?: TransactionData; // Optional, for editing existing transactions
+  initialData?: TransactionData;
   onSubmit: (transaction: Omit<TransactionData, '_id' | 'createdAt' | 'updatedAt' | 'user'>) => void;
-  onCancel?: () => void; // Optional, for cancel button in edit mode
+  onCancel?: () => void;
   isEditMode?: boolean;
 }
 
@@ -37,7 +35,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ initialData, onSubmit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (amount <= 0) {
-      alert('Amount must be positive');
+      alert('Amount must be positive'); // Consider replacing with a Bootstrap modal
       return;
     }
     onSubmit({ type, category, amount, date, description });
@@ -49,46 +47,90 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ initialData, onSubmit
   const availableCategories = type === 'income' ? incomeCategories : expenseCategories;
 
   return (
-    <div style={{ padding: '20px', border: '1px solid #eee', borderRadius: '8px', marginBottom: '20px', backgroundColor: '#f9f9f9' }}>
-      <h3>{isEditMode ? 'Edit Transaction' : 'Add New Transaction'}</h3>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '10px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Type:</label>
-          <select value={type} onChange={(e) => setType(e.target.value as 'income' | 'expense')} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
-          </select>
-        </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Category:</label>
-          <select value={category} onChange={(e) => setCategory(e.target.value)} required style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}>
-            <option value="">Select a category</option>
-            {availableCategories.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-        </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Amount:</label>
-          <input type="number" value={amount} onChange={(e) => setAmount(parseFloat(e.target.value))} required min="0.01" step="0.01" style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }} />
-        </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Date:</label>
-          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }} />
-        </div>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Description (Optional):</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px', resize: 'vertical' }}></textarea>
-        </div>
-        <button type="submit" style={{ padding: '10px 15px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginRight: '10px' }}>
-          {isEditMode ? 'Update Transaction' : 'Add Transaction'}
-        </button>
-        {isEditMode && (
-          <button type="button" onClick={onCancel} style={{ padding: '10px 15px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-            Cancel
-          </button>
-        )}
-      </form>
+    <div className="card shadow-sm p-4 mb-4">
+      <div className="card-body">
+        <h4 className="card-title mb-3">{isEditMode ? 'Edit Transaction' : 'Add New Transaction'}</h4>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="transactionType" className="form-label">Type:</label>
+            <select
+              id="transactionType"
+              value={type}
+              onChange={(e) => setType(e.target.value as 'income' | 'expense')}
+              className="form-select"
+            >
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="transactionCategory" className="form-label">Category:</label>
+            <select
+              id="transactionCategory"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="form-select"
+              required
+            >
+              <option value="">Select a category</option>
+              {availableCategories.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="transactionAmount" className="form-label">Amount:</label>
+            <input
+              type="number"
+              id="transactionAmount"
+              value={amount}
+              onChange={(e) => setAmount(parseFloat(e.target.value))}
+              className="form-control"
+              required
+              min="0.01"
+              step="0.01"
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="transactionDate" className="form-label">Date:</label>
+            <input
+              type="date"
+              id="transactionDate"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="form-control"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="transactionDescription" className="form-label">Description (Optional):</label>
+            <textarea
+              id="transactionDescription"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+              className="form-control"
+            ></textarea>
+          </div>
+          <div className="d-flex justify-content-end">
+            {isEditMode && (
+              <button
+                type="button"
+                onClick={onCancel}
+                className="btn btn-secondary me-2"
+              >
+                Cancel
+              </button>
+            )}
+            <button
+              type="submit"
+              className={`btn ${isEditMode ? 'btn-primary' : 'btn-success'}`}
+            >
+              {isEditMode ? 'Update Transaction' : 'Add Transaction'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

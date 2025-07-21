@@ -2,34 +2,37 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
-import { AuthProvider } from './auth/AuthProvider';
-import Auth from './pages/Login';
+import { AuthProvider } from './auth/AuthContext';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import Dashboard from './pages/DashBoard';
-import Sidebar from './components/SideBar'; // Import the Sidebar component
-// Import new pages
+import Sidebar from './components/SideBar';
 import BudgetPlanning from './pages/BudgetPlanning';
 import MonthlyTracking from './pages/MonthlyTracking';
 
-// A simple protected route wrapper
+// A protected route component to ensure user is logged in
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <p className="text-gray-700 text-xl">Loading application...</p>
+      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark"> {/* Changed bg-light to bg-dark */}
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="ms-3 text-white">Loading application...</p> {/* Changed text-muted to text-white */}
       </div>
-    ); // Or a proper spinner
+    );
   }
 
   if (!user) {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100"> {/* Flex container for sidebar and content */}
-      <Sidebar />
-      <main className="flex-grow p-6 overflow-auto"> {/* Main content area, flex-grow to fill space */}
+    <div className="d-flex min-vh-100 bg-dark"> {/* Changed bg-light to bg-dark */}
+      <Sidebar /> {/* Your Sidebar component */}
+      <main className="flex-grow-1 p-4 overflow-auto dashboard-background"> {/* dashboard-background will handle its own image */}
         {children}
       </main>
     </div>
@@ -41,8 +44,12 @@ function App() {
     <Router>
       <AuthProvider>
         <Routes>
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} /> {/* Default redirect */}
+          {/* Public Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Navigate to="/login" replace />} /> {/* Redirect root to login */}
+
+          {/* Protected Routes */}
           <Route
             path="/dashboard"
             element={
@@ -68,7 +75,9 @@ function App() {
             }
           />
           {/* Add more protected routes here as you create new sections */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} /> {/* Fallback for unknown routes */}
+
+          {/* Catch-all for undefined routes (redirect to login or a 404 page) */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </AuthProvider>
     </Router>

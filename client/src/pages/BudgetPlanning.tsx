@@ -1,104 +1,153 @@
 // F:\IncomeSense\client\src\pages\BudgetPlanning.tsx
-import React, { useState, useEffect } from 'react';
-// You will likely need to define a BudgetData type and API functions
-// import { getBudgets, addBudget, updateBudget, deleteBudget, BudgetData } from '../api/budgets';
+import React, { useState } from 'react';
+// For future enhancements, if needed
 
 const BudgetPlanning: React.FC = () => {
-  type BudgetData = {
-    id: string;
-    category: string;
-    limit: number;
-    spent: number;
-  };
-  
-  const [budgets, setBudgets] = useState<BudgetData[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // State for input fields
+  const [netIncome, setNetIncome] = useState<number | ''>('');
+  const [budgetRule, setBudgetRule] = useState<string>('50/30/20'); // Default to 50/30/20 rule
+  const [preferredLifestyle, setPreferredLifestyle] = useState<string>(''); // Text input, for future personalized advice
 
-  // Example: Fetch budgets (you'll need to create corresponding API endpoints on the backend)
-  useEffect(() => {
-    const fetchBudgets = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        // const data = await getBudgets(); // Call your backend API
-        // setBudgets(data);
-        setBudgets([ // Dummy data for now
-          { id: '1', category: 'Food', limit: 500, spent: 300 },
-          { id: '2', category: 'Rent', limit: 1200, spent: 1200 },
-          { id: '3', category: 'Entertainment', limit: 200, spent: 150 },
-          { id: '4', category: 'Utilities', limit: 150, spent: 100 },
-          { id: '5', category: 'Transportation', limit: 100, spent: 80 },
-        ]);
-      } catch (err: unknown) {
-        // Handle errors similar to Dashboard.tsx
-        setError("Failed to fetch budgets.");
-        console.error("Error fetching budgets:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBudgets();
-  }, []);
+  // State for calculated outputs
+  const [recommendedSpending, setRecommendedSpending] = useState<number | null>(null);
+  const [recommendedSavingsInvestment, setRecommendedSavingsInvestment] = useState<number | null>(null);
+  const [calculationError, setCalculationError] = useState<string | null>(null);
+
+  const handleCalculateBudget = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCalculationError(null); // Clear previous errors
+
+    if (netIncome === '' || isNaN(Number(netIncome)) || Number(netIncome) <= 0) {
+      setCalculationError('Please enter a valid positive net income.');
+      setRecommendedSpending(null);
+      setRecommendedSavingsInvestment(null);
+      return;
+    }
+
+    const income = Number(netIncome);
+    let needsPercentage: number;
+    let wantsPercentage: number;
+    let savingsInvestmentPercentage: number;
+
+    // Based on the selected budget rule
+    switch (budgetRule) {
+      case '50/30/20':
+        needsPercentage = 0.50; // 50% for Needs (essential expenses)
+        wantsPercentage = 0.30; // 30% for Wants (discretionary spending)
+        savingsInvestmentPercentage = 0.20; // 20% for Savings & Debt Repayment/Investment
+        break;
+      // You can add more rules here (e.g., '70/20/10', 'Custom')
+      // For 'Custom', you'd need additional input fields for percentages
+      default:
+        needsPercentage = 0.50;
+        wantsPercentage = 0.30;
+        savingsInvestmentPercentage = 0.20;
+        break;
+    }
+
+    const calculatedNeeds = income * needsPercentage;
+    const calculatedWants = income * wantsPercentage;
+    const calculatedSavingsInvestment = income * savingsInvestmentPercentage;
+
+    setRecommendedSpending(calculatedNeeds + calculatedWants); // Expensed = Needs + Wants
+    setRecommendedSavingsInvestment(calculatedSavingsInvestment);
+  };
+
+  // Removed useEffect for fetching dummy budgets as this is now a calculator
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md min-h-full">
-      <h1 className="text-3xl font-extrabold text-gray-900 mb-6 border-b pb-4">
-        Budget Planning
+    <div className="container-fluid py-4">
+      <h1 className="mb-4 text-dark-main fw-bold border-bottom pb-3">
+        Budget Allocation Planner
       </h1>
 
-      {loading && <p className="text-center text-gray-600">Loading budgets...</p>}
-      {error && <p className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-sm">{error}</p>}
+      {calculationError && <div className="alert alert-dark-danger text-sm mb-4" role="alert">{calculationError}</div>}
 
-      {/* Budget Form (to add/edit budget limits) */}
-      <div className="mb-8 p-6 bg-gray-50 rounded-lg shadow-inner">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Set Monthly Budget</h2>
-        <p className="text-gray-600 mb-4">
-          Use this section to set your monthly spending limits for various categories.
-        </p>
-        {/* Implement a form here for category, limit, etc. */}
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label htmlFor="category" className="block text-gray-700 text-sm font-bold mb-2">Category:</label>
-                <input type="text" id="category" placeholder="e.g., Groceries" className="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-2 px-3 text-gray-700" />
-            </div>
-            <div>
-                <label htmlFor="limit" className="block text-gray-700 text-sm font-bold mb-2">Budget Limit ($):</label>
-                <input type="number" id="limit" placeholder="e.g., 300" className="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-2 px-3 text-gray-700" />
-            </div>
-            <div className="md:col-span-2">
-                <button type="submit" className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg w-full md:w-auto transition duration-200">
-                    Add/Update Budget
-                </button>
-            </div>
-        </form>
-      </div>
-
-      {/* Budget List/Summary */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Current Budgets</h2>
-        {budgets.length === 0 && !loading && !error && (
-          <p className="text-center text-gray-600">No budgets set yet. Start by adding one above!</p>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {budgets.map(budget => (
-            <div key={budget.id} className="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
-              <h3 className="text-xl font-semibold text-blue-800 mb-2">{budget.category}</h3>
-              <p className="text-gray-700 text-md">Limit: <span className="font-bold text-blue-900 text-lg">${budget.limit.toFixed(2)}</span></p>
-              <p className="text-gray-700 text-md">Spent: <span className="font-bold text-blue-900 text-lg">${budget.spent.toFixed(2)}</span></p>
-              <div className="w-full bg-gray-200 rounded-full h-3 mt-3">
-                <div
-                  className={`h-3 rounded-full ${budget.spent / budget.limit > 1 ? 'bg-red-600' : 'bg-blue-600'}`}
-                  style={{ width: `${Math.min(100, (budget.spent / budget.limit) * 100)}%` }}
-                ></div>
+      {/* Budget Calculation Form */}
+      <div className="card dark-theme-card shadow-sm p-4 mb-4">
+        <div className="card-body">
+          <h4 className="card-title text-dark-main mb-3">Calculate Your Budget Allocation</h4>
+          <p className="text-dark-muted mb-4">
+            Enter your monthly net income and select a budget rule to get recommendations for spending and savings.
+          </p>
+          <form onSubmit={handleCalculateBudget} className="row g-3">
+              <div className="col-md-6">
+                  <label htmlFor="netIncome" className="form-label">Monthly Net Income ($):</label>
+                  <input
+                    type="number"
+                    id="netIncome"
+                    placeholder="e.g., 3500"
+                    className="form-control form-control-dark"
+                    value={netIncome}
+                    onChange={(e) => setNetIncome(e.target.value === '' ? '' : parseFloat(e.target.value))}
+                    min="0"
+                    step="0.01"
+                    required
+                  />
               </div>
-              <p className={`text-sm mt-2 ${budget.spent / budget.limit > 1 ? 'text-red-600 font-semibold' : 'text-gray-500'}`}>
-                {budget.spent / budget.limit > 1 ? 'Over budget!' : `Remaining: $${(budget.limit - budget.spent).toFixed(2)}`}
-              </p>
-            </div>
-          ))}
+              <div className="col-md-6">
+                  <label htmlFor="budgetRule" className="form-label">Budget Rule:</label>
+                  <select
+                    id="budgetRule"
+                    className="form-select form-control-dark"
+                    value={budgetRule}
+                    onChange={(e) => setBudgetRule(e.target.value)}
+                  >
+                    <option value="50/30/20">50/30/20 Rule (Needs/Wants/Savings)</option>
+                    {/* Add more budget rules here if desired */}
+                  </select>
+              </div>
+              <div className="col-12">
+                  <label htmlFor="preferredLifestyle" className="form-label">Preferred Lifestyle (Optional, for future advice):</label>
+                  <input
+                    type="text"
+                    id="preferredLifestyle"
+                    placeholder="e.g., Frugal, Moderate, Luxurious"
+                    className="form-control form-control-dark"
+                    value={preferredLifestyle}
+                    onChange={(e) => setPreferredLifestyle(e.target.value)}
+                  />
+              </div>
+              <div className="col-12">
+                  <button type="submit" className="btn btn-dark-primary">
+                      Calculate Allocation
+                  </button>
+              </div>
+          </form>
         </div>
       </div>
+
+      {/* Budget Allocation Results */}
+      {recommendedSpending !== null && recommendedSavingsInvestment !== null && (
+        <div className="card dark-theme-card shadow-sm p-4">
+          <div className="card-body">
+            <h4 className="card-title text-dark-main mb-3">Your Recommended Monthly Allocation</h4>
+            <div className="row g-3">
+              <div className="col-md-6">
+                <div className="card h-100 dark-theme-card shadow-sm">
+                  <div className="card-body bg-success-subtle">
+                    <h5 className="card-title text-success mb-2">Recommended Spending</h5>
+                    <p className="card-text fs-3 fw-bold text-success">${recommendedSpending.toFixed(2)}</p>
+                    <p className="text-sm text-dark-muted">(Covers your Needs and Wants)</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="card h-100 dark-theme-card shadow-sm">
+                  <div className="card-body bg-info-subtle">
+                    <h5 className="card-title text-info mb-2">Recommended Savings/Investments</h5>
+                    <p className="card-text fs-3 fw-bold text-info">${recommendedSavingsInvestment.toFixed(2)}</p>
+                    <p className="text-sm text-dark-muted">(For your financial goals)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p className="text-dark-muted mt-4">
+              Based on the **{budgetRule} Rule** and your net income of **${Number(netIncome).toFixed(2)}**.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,0 +1,299 @@
+// ------------------------------------------------------------
+// BOOTSTRAP CORE IMPORTS
+// ------------------------------------------------------------
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/bootstrap";
+
+// ------------------------------------------------------------
+// BRONX CLUB THEME - DARK REFINED AESTHETIC
+// ------------------------------------------------------------
+
+// Color Palette
+$bronx-black: #121212;
+$bronx-white: #f5f5f5;
+$bronx-red: #e53935;
+$bronx-red-hover: #c62828;
+$bronx-green: #43a047;
+$bronx-blue: #1e88e5;
+$bronx-gray-dark: #1e1e1e;
+$bronx-gray-light: #2a2a2a;
+
+// Bootstrap Overrides
+$primary: $bronx-red;
+$danger: $bronx-red;
+$info: $bronx-blue;
+$success: $bronx-green;
+
+// Global Body
+body {
+  background-color: $bronx-black;
+  color: $bronx-white;
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+// ------------------------------------------------------------
+// GENERAL COMPONENTS
+// ------------------------------------------------------------
+
+// Cards
+.card.bronx-card {
+  background-color: $bronx-gray-dark;
+  color: $bronx-white;
+  border: 1px solid lighten($bronx-gray-dark, 10%);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  .card-header {
+    background-color: $bronx-gray-dark;
+    border-bottom: 1px solid lighten($bronx-gray-dark, 10%);
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+}
+
+// Typography
+.text-bronx-main {
+  color: $bronx-white !important;
+}
+.text-bronx-muted {
+  color: lighten($bronx-white, 30%) !important;
+}
+.text-bronx-red {
+  color: $bronx-red !important;
+}
+
+// Buttons
+.btn-bronx-primary {
+  background-color: $bronx-red;
+  border-color: $bronx-red;
+  color: $bronx-white;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.95rem;
+
+  &:hover {
+    background-color: $bronx-red-hover;
+    border-color: $bronx-red-hover;
+    box-shadow: 0 0.25rem 0.5rem rgba($bronx-red, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+}
+
+.btn-bronx-secondary {
+  background-color: transparent;
+  border: 1px solid $bronx-white;
+  color: $bronx-white;
+  border-radius: 0.25rem;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0.25rem 0.5rem rgba(255, 255, 255, 0.1);
+  }
+}
+
+// Sidebar
+.sidebar-custom {
+  background-color: $bronx-black;
+  color: $bronx-white;
+  min-width: 250px;
+  max-width: 250px;
+  box-shadow: 0 0.5rem 1rem rgba(255, 255, 255, 0.05);
+
+  .nav-link {
+    color: $bronx-white !important;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+
+    &.active {
+      background-color: rgba($bronx-red, 0.15);
+      font-weight: bold;
+      box-shadow: 0 0.125rem 0.25rem rgba($bronx-red, 0.075);
+    }
+
+    &:hover:not(.active) {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+  }
+}
+
+// Dashboard Background
+.dashboard-background {
+  background-color: $bronx-gray-dark;
+  background-image: none;
+}
+
+// Stat Cards
+.stats-card {
+  .text-value {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: $bronx-white;
+  }
+  .text-label {
+    font-size: 0.95rem;
+    color: lighten($bronx-white, 20%);
+  }
+
+  .icon-square {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.6rem;
+    border-radius: 0.75rem;
+
+    &.bg-success {
+      background: linear-gradient(135deg, $bronx-green, darken($bronx-green, 10%));
+      color: $bronx-white;
+    }
+
+    &.bg-danger {
+      background: linear-gradient(135deg, $bronx-red, $bronx-red-hover);
+      color: $bronx-white;
+    }
+
+    &.bg-info {
+      background: linear-gradient(135deg, $bronx-blue, darken($bronx-blue, 10%));
+      color: $bronx-white;
+    }
+
+    &.bg-primary {
+      background: linear-gradient(135deg, $bronx-red, $bronx-red-hover);
+      color: $bronx-white;
+    }
+  }
+}
+
+// Forms
+.form-control,
+.form-select {
+  background-color: $bronx-black;
+  border: 1px solid $bronx-white;
+  color: $bronx-white;
+  border-radius: 0.25rem;
+  font-size: 0.95rem;
+
+  &::placeholder {
+    color: lighten($bronx-white, 20%);
+  }
+
+  &:focus {
+    border-color: $bronx-red;
+    box-shadow: 0 0 0 0.25rem rgba($bronx-red, 0.25);
+  }
+}
+
+// Form Labels
+.form-label {
+  color: $bronx-white !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+// Alerts
+.alert-bronx-danger {
+  background-color: $bronx-red;
+  color: $bronx-white;
+  border-color: darken($bronx-red, 10%);
+}
+
+// Auth Pages
+.auth-page-background {
+  background: $bronx-black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.auth-card {
+  background-color: $bronx-gray-dark;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.75rem 2rem rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  color: $bronx-white;
+  max-width: 380px;
+  width: 100%;
+  border: 1px solid $bronx-gray-light;
+}
+
+.auth-title {
+  color: $bronx-white;
+  font-size: 2.25rem;
+  font-weight: 800;
+}
+
+// Auth Header
+.auth-header {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  color: $bronx-white;
+  font-size: 1.5rem;
+  font-weight: bold;
+
+  .dot {
+    width: 1rem;
+    height: 1rem;
+    background-color: $bronx-red;
+    border-radius: 50%;
+    display: inline-block;
+  }
+}
+
+// Table Styles
+.table-bronx-theme {
+  --bs-table-bg: #{$bronx-black};
+  --bs-table-striped-bg: #{$bronx-gray-light};
+  --bs-table-hover-bg: #{$bronx-gray-light};
+  --bs-table-color: #{$bronx-white};
+  --bs-table-border-color: #{$bronx-gray-dark};
+
+  th {
+    background-color: lighten($bronx-black, 50%);
+    color: $bronx-white;
+    font-weight: 600;
+  }
+  td {
+    color: $bronx-white;
+  }
+}
+
+// Chart.js Elements
+.chartjs-render-monitor canvas {
+  color: $bronx-white;
+}
+
+// Dropdown Icon Override for Dark Theme
+.form-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' viewBox='0 0 16 16'%3e%3cpath d='M1.5 5.5l6 6 6-6'/%3e%3c/svg%3e");
+}
+
+// Badge Styles
+.badge.bg-success {
+  background-color: $bronx-green !important;
+  color: $bronx-white !important;
+}
+
+.badge.bg-danger {
+  background-color: $bronx-red !important;
+  color: $bronx-white !important;
+}
