@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // Define your backend API URL
 //for deploypush
-const API_URL = 'import.meta.env.VITE_API_BASE_URL'; // Make sure this matches your backend
+const API_URL = import.meta.env.VITE_API_BASE_URL; // Make sure this matches your backend
 
 interface AuthResponse {
   _id: string;
