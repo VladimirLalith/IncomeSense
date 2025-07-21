@@ -18,7 +18,11 @@ const app: Application = express();
 
 // Middleware
 app.use(express.json()); // Body parser for JSON data
-app.use(cors()); // Enable CORS for all routes
+app.use(cors({
+    origin: ['https://income-sense-87mlp4wbc-lalith-varmas-projects.vercel.app'], // ✅ your Vercel frontend domain
+    credentials: true // optional: if you're using cookies/auth headers
+  }));
+  
 
 // Basic route for testing
 app.get('/', (req: Request, res: Response) => {
