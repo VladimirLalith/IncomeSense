@@ -3,7 +3,7 @@ import axios from 'axios';
 import type { User } from '../auth/authContextDefinition'; // Import User interface as a type (corrected path to auth)
 
 // Define your backend API URL for transactions
-const API_URL = 'http://localhost:5000/api/transactions';
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/transactions`;
 
 // Define interfaces for transaction data
 export interface TransactionData {
