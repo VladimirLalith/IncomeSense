@@ -6,6 +6,7 @@ import connectDB from './config/db';
 import authRoutes from './routes/authRoutes';
 import transactionRoutes from './routes/transactionRoutes'; // Import transaction routes
 
+
 // Load environment variables
 dotenv.config();
 
@@ -13,6 +14,7 @@ dotenv.config();
 connectDB();
 
 const app: Application = express();
+
 
 // Middleware
 app.use(express.json()); // Body parser for JSON data

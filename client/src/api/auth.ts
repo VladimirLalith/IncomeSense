@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // client/src/api/auth.ts
 import axios from 'axios';
 
@@ -19,5 +20,15 @@ export const registerUser = async (username: string, email: string, password: st
 
 export const loginUser = async (email: string, password: string): Promise<AuthResponse> => {
   const response = await axios.post<AuthResponse>(`${API_URL}/login`, { email, password });
+  return response.data;
+};
+
+export const getTransactions = async () => {
+  const response = await axios.get(`${API_URL}/api/transactions`);
+  return response.data;
+};
+
+export const addTransaction = async (data: any) => {
+  const response = await axios.post(`${API_URL}/api/transactions`, data);
   return response.data;
 };
