@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // Define your backend API URL
-const API_URL = 'http://localhost:5000/api/auth'; // Make sure this matches your backend
+const API_URL = 'https://incomesense.onrender.com'; // Make sure this matches your backend
 
 interface AuthResponse {
   _id: string;
